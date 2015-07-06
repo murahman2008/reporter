@@ -1,0 +1,54 @@
+body {
+	font-family:tahoma;
+	font-size:14px;
+}
+
+.pd_top_xs {
+	padding-top:5px;
+}
+.pd_right_xs {
+	padding-right:5px;
+}
+.pd_bottom_xs {
+	padding-bottom:5px;
+}
+.pd_left_xs {
+	padding-left:5px;
+}
+
+.pd_xs {
+	padding: 5px 5px 5px 5px;
+}
+
+.center {
+	text-align:center;
+}
+
+.bold {
+	font-weight:bold;
+}
+
+.border {
+	border:solid 1px lightgrey;
+}
+
+.round_border {
+	border-radius:3px;
+}
+
+input[type="text"], 
+input[type="password"] {
+	border:none;
+	border:solid 1px lightgrey;
+	padding: 2px 2px 2px 2px;
+	min-height:30px;
+	/* min-width:300px; */
+}
+
+.small_btn {
+	min-width:20px;
+}
+
+.btn {
+	/* min-width:80px; */
+}
