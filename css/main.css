@@ -20,6 +20,63 @@ body {
 	padding: 5px 5px 5px 5px;
 }
 
+.pd_left_md {
+	padding-left: 10px;
+}
+.pd_top_md {
+	padding-top: 10px;
+}
+.pd_right_md {
+	padding-right: 10px;
+}
+.pd_bottom_md {
+	padding-bottom: 10px;
+}
+.pd_md {
+	padding: 10px 10px 10px 10px;
+}
+
+.zero_padding {
+	padding: 0px 0px 0px 0px;
+}
+
+.mg_top_xs {
+	margin-top:5px;
+}
+.mg_right_xs {
+	margin-right:5px;
+}
+.mg_bottom_xs {
+	margin-bottom:5px;
+}
+.mg_left_xs {
+	margin-left:5px;
+}
+
+.mg_xs {
+	margin: 5px 5px 5px 5px;
+}
+
+.mg_top_md {
+	margin-top:10px;
+}
+.mg_right_md {
+	margin-right:10px;
+}
+.mg_bottom_md {
+	margin-bottom:10px;
+}
+.mg_left_md {
+	margin-left:10px;
+}
+.mg_md {
+	margin: 10px 10px 10px 10px;
+}
+
+.zero_margin {
+	margin: 0px 0px 0px 0px;
+}
+
 .center {
 	text-align:center;
 }
@@ -42,6 +99,7 @@ input[type="password"] {
 	border:solid 1px lightgrey;
 	padding: 2px 2px 2px 2px;
 	min-height:30px;
+	color:black;
 	/* min-width:300px; */
 }
 
@@ -51,4 +109,25 @@ input[type="password"] {
 
 .btn {
 	/* min-width:80px; */
+}
+
+.page_title {
+	background-color: #336699;
+	color:white; 
+	font-size:18pt;
+}
+
+.error_msg_div {
+	color:white;
+	background-color:pink;
+}
+
+.success_msg_div {
+	color:blue;
+	background-color:#E6F5FF;
+}
+
+select {
+	height: 30px;
+	
 }

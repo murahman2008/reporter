@@ -51,8 +51,11 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 */
 
 $route['tester'] = 'home/tester';
+$route['shipping'] = 'home/shipping';
+$route['payments/(:any)'] = 'payments/$1';
+$route['report/(:any)'] = 'reports/$1';
 $route[''] = 'home';
-$route['login'] = 'home';
+$route['login'] = 'home/login';
 $route['ajax/(:any)'] = 'ajax/$1';
 
 $route['default_controller'] = 'home';

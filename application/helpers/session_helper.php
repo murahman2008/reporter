@@ -15,7 +15,7 @@ function checkLoggedUser()
 	return ((isset($_SESSION['user']) && (is_array($_SESSION['user']) || is_object($_SESSION['user']))) ? $_SESSION['user'] : false);
 }
 
-function checkAdminRole(Array $role, $strictAdmin = false)
+function checkAdminRole(Array $role = array(), $strictAdmin = false)
 {
 	if($strictAdmin)
 		return ((isset($role['id']) && trim($role['id']) === trim(ROLE_ID_ADMIN)) ? true : false); 

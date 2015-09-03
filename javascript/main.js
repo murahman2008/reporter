@@ -21,6 +21,14 @@ $(function() {
 		});
 	}
 	
+	if($('.date_picker').length) {
+		$('.date_picker').datepicker({
+			changeMonth: true,
+			changeYear: true,
+			dateFormat: 'dd/mm/yy'
+		});
+	}
+	
 });
 
 function updateReportCounter(button) {
@@ -104,5 +112,23 @@ function userLogin(form) {
 		}
 	});
 	
+	return false;
+}
+
+function addMoreFile() {
+	var fc = $.trim($('#file_counter').val()) * 1;
+	if(fc >= 3)
+		$('#add_file_btn').remove();
+	else {
+		var html = '<div class = "col-xs-12"><div class = "col-xs-6"><input type = "file" name = "payment_file[]" /></div><div class = "col-xs-6"><input type = "button" onclick = "return addMoreFile();" name = "add_file_btn" id = "add_file_btn" value = "+" /></div></div>';
+		$('#add_file_btn').remove();
+		fc = fc + 1;
+		$('#file_counter').val(fc);
+
+		$('#pf_holder').append(html);
+
+		if(fc >= 3)
+			$('#add_file_btn').remove();
+	}
 	return false;
 }

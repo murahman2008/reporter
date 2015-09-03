@@ -56,6 +56,11 @@ class Home extends CI_Controller
 		}	
 	}
 	
+	public function shipping()
+	{
+		$this->load->view('shipping');
+	}
+	
 	public function tester()
 	{
 		$this->load->model('user');

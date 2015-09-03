@@ -276,4 +276,93 @@ class Report_Type extends MY_Model
 		
 		return $output;
 	}
+
+	public function generateDateRangeReport(Array $option = array())
+	{
+		if(count($option) <= 0)
+			throw new Exception('No criteria has been provided to generate the Date Range Report');
+		
+		if(!isset($option['report_start_date']) || ($startDate = trim($option['report_start_date'])) === '' || checkDateWithFormat($startDate, 'Y-m-d') === false)
+			throw new Exception('Report Start Date must be a valid date with Format [Year-Month-Day]');
+		
+		if(!isset($option['report_end_date']) || ($endDate = trim($option['report_end_date'])) === '' || checkDateWithFormat($endDate, 'Y-m-d') === false)
+			throw new Exception('Report End Date must be a valid date with Format [Year-Month-Day]');
+		
+		if(strtotime($startDate) > strtotime($endDate))
+			throw new Exception('Start Date cannot be greater that end date');
+		
+		if(!isset($option['selected_user']))
+			throw new Exception('A user must be specified');
+		
+		$loggedRole = getSessionData('role');
+		$loggedUser = checkLoggedUser();
+		if(checkContractorRole($loggedRole))
+		{
+			if(($selectedUser = trim($option['selected_user'])) === '0' || $selectedUser !== $loggedUser['id'])
+				throw new Exception("You do not have the right permission to view this report");
+		}
+		
+		$output = array();
+		
+		$reportTypeId = trim($option['report_type']);
+		
+		$this->db->select('rc.id as rc_id, rc.working_date as rc_working_date, rc.report_type_id as rc_report_type_id, rc.counter as rc_counter,
+						   rt.id as rt_id, rt.name as rt_name, rt.description as rt_description, 
+						   u.id as user_id, u.first_name as user_first_name, u.last_name as user_last_name, u.role_id as user_role_id, u.email as user_email, 
+						   u.phone as user_phone, u.username as user_username')
+				 ->from('report_counter as rc')
+				 ->join('report_type as rt', 'rt.id = rc.report_type_id and rt.active = 1', 'inner')
+				 ->join('user as u', 'u.id = rc.created_by_id and u.active = 1', 'inner')
+				 ->where(array('rc.working_date >=' => $startDate, 'rc.working_date <=' => $endDate));
+		
+		if($reportTypeId !== '0')
+			$this->db->where(array('rc.report_type_id' => $reportTypeId));
+		
+		if($selectedUser !== '0')
+			$this->db->where(array('rc.created_by_id' => $selectedUser));
+		
+		$this->db->order_by('rc.created_by_id', 'ASC')
+				 ->order_by('rc.working_date', 'ASC')
+				 ->order_by('rc.report_type_id', 'ASC');
+		
+		if(isset($option['limit']) && isset($option['limit_start']))
+			$this->db->limit($option['limit'], $option['limit_start']);
+		else
+			$this->db->limit(100, 0);
+		
+		$query = $this->db->get();
+		if($query->num_rows() > 0)
+		{
+			foreach($query->result() as $row)
+			{
+				if(!isset($output[$row->user_id]))
+				{
+					$output[$row->user_id] = array();
+					$output[$row->user_id]['id'] = trim($row->user_id);
+					$output[$row->user_id]['first_name'] = trim($row->user_first_name);
+					$output[$row->user_id]['last_name'] = trim($row->user_last_name);
+					$output[$row->user_id]['email'] = trim($row->user_email);
+					$output[$row->user_id]['phone'] = trim($row->user_phone);
+					$output[$row->user_id]['role_id'] = trim($row->user_role_id);
+					$output[$row->user_id]['username'] = trim($row->user_username);
+					$output[$row->user_id]['report_counters'] = array();
+				} 
+
+				if(!isset($output[$row->user_id]['report_counters'][$row->rc_working_date]))
+					$output[$row->user_id]['report_counters'][$row->rc_working_date] = array();
+				
+				if(!isset($output[$row->user_id]['report_counters'][$row->rc_working_date][$row->rt_id]))
+				{
+					$output[$row->user_id]['report_counters'][$row->rc_working_date][$row->rt_id] = array();
+					$output[$row->user_id]['report_counters'][$row->rc_working_date][$row->rt_id]['id'] = trim($row->rt_id);
+					$output[$row->user_id]['report_counters'][$row->rc_working_date][$row->rt_id]['name'] = trim($row->rt_name);
+					$output[$row->user_id]['report_counters'][$row->rc_working_date][$row->rt_id]['description'] = trim($row->rt_description);
+				}
+				$output[$row->user_id]['report_counters'][$row->rc_working_date][$row->rt_id]['counter'] = trim($row->rc_counter);
+				$output[$row->user_id]['report_counters'][$row->rc_working_date][$row->rt_id]['rc_id'] = trim($row->rc_id);
+			}	
+		}
+		
+		return $output;	
+	}
 }
